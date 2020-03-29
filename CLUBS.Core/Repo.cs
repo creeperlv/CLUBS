@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CLUBS.Tools;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace CLUBS.Core
         public DirectoryInfo RepoDirectory;
         public FileInfo RepoManifest;
         public List<string> Dependencies = new List<string>();
+        public ToolConfig CustomedTools;
         public List<Project> Projects = new List<Project>();
         public Repo(DirectoryInfo RepoDir)
         {
@@ -44,6 +46,10 @@ namespace CLUBS.Core
                 else if (content_Lines[i].StartsWith("Project:"))
                 {
                     Projects.Add(Project.Load(new FileInfo(Path.Combine(RepoDirectory.FullName, content_Lines[i].Substring("Project:".Length)))));
+                }
+                else if (content_Lines[i].StartsWith("CustomedTools:"))
+                {
+                    CustomedTools=ToolConfig.ResolveFromFile(new FileInfo(Path.Combine(RepoDirectory.FullName, content_Lines[i].Substring("Project:".Length))).FullName);
                 }
             }
         }

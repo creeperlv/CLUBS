@@ -75,19 +75,40 @@ namespace CLUBS
                     {
                         if (repo == null)
                         {
-
                             repo = new Repo(new DirectoryInfo(new DirectoryInfo(".").FullName));
                         }
                     }
                     break;
                 case Operations.Tools:
                     {
+                        Console.WriteLine("");
                         Console.WriteLine("Recorded Tools:");
                         Console.WriteLine("");
                         Console.WriteLine("---------");
                         foreach (var item in ToolConfig.DefaultConfig.ToolPair)
                         {
                             Console.WriteLine($"{item.Key}:{item.Value.OriginalString} -> {item.Value.RealPath}");
+                        }
+                        try
+                        {
+                            repo = new Repo(new DirectoryInfo(new DirectoryInfo(".").FullName));
+
+                            Console.WriteLine("");
+                            Console.WriteLine("Customed Tools:");
+                            Console.WriteLine("");
+                            Console.WriteLine("---------");
+                            foreach (var item in repo.CustomedTools.ToolPair)
+                            {
+                                Console.WriteLine($"{item.Key}:{item.Value.OriginalString} -> {item.Value.RealPath}");
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine("---------");
+                            Console.WriteLine("");
+                            Console.WriteLine("\tNo Customed Tools!");
+                            Console.WriteLine("");
+                            Console.WriteLine("---------");
                         }
                     }
                     break;
