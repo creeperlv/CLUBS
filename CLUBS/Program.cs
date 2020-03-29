@@ -3,6 +3,7 @@ using CLUBS.Tools;
 using CLUBS.Tools.Windows;
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace CLUBS
 {
@@ -11,6 +12,10 @@ namespace CLUBS
         static void Main(string[] args)
         {
             Console.WriteLine("CLUBS - Creeper Lv's Universal Build System");
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Console.WriteLine("Running on Windows.");
+            }
             Repo repo = null;
             Operations operation = Operations.Repo;
             if (args.Length == 0)

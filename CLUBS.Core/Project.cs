@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -42,21 +43,89 @@ namespace CLUBS.Core
             var mani = File.ReadAllLines(ProjectManifest.FullName);
             for (int i = 0; i < mani.Length; i++)
             {
-                if (mani[i].StartsWith("WorkingDirectory ")){
+                if (mani[i].StartsWith("WorkingDirectory "))
+                {
                     project.WorkingDirectory = mani[i].Substring("WorkingDirectory ".Length);
-                }else if (mani[i].StartsWith("ImportFile ")){
+                }
+                else if (mani[i].StartsWith("Platform "))
+                {
+                    project.Platform = mani[i].Substring("Platform ".Length);
+                }
+                else if (mani[i].StartsWith("ImportFile "))
+                {
                     var f = mani[i].Substring("ImportFile ".Length);
-                    project.ImportFiles.Add(f.Substring(0,f.IndexOf('=')),f.Substring(f.IndexOf('=')));
-                }else if (mani[i].StartsWith("CMD ")){
-                    var f = mani[i].Substring("CMD ".Length);
-                    project.CompileCommands.Add(f);
+                    project.ImportFiles.Add(f.Substring(0, f.IndexOf('=')), f.Substring(f.IndexOf('=')));
+                }
+                else if (mani[i].StartsWith("ExportFile "))
+                {
+                    var f = mani[i].Substring("ExportFile ".Length);
+                    project.ExportFiles.Add(f.Substring(0, f.IndexOf('=')), f.Substring(f.IndexOf('=')));
+                }
+                else if (mani[i].StartsWith("CMD "))
+                {
+                    var cmd = mani[i].Substring("CMD ".Length);
+                    project.CompileCommands.Add(cmd);
+                }
+                else if (mani[i].StartsWith("Delete "))
+                {
+                    var DeleteItem = mani[i].Substring("Delete ".Length);
+                    project.DeleteItems.Add(DeleteItem);
                 }
             }
             return project;
         }
         public void Compile()
         {
+            bool willCompile = false;
+            if (Platform == "Any")
+            {
+                willCompile = true;
+            }
+            else
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    if (Platform.ToUpper() == "WINDOWS" || Platform.ToUpper() == "WIN")
+                    {
+                        willCompile = true;
+                    }
+                }
+                else
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                {
+                    if (Platform.ToUpper() == "MACOS" || Platform.ToUpper() == "OSX" || Platform.ToUpper() == "MAC")
+                    {
+                        willCompile = true;
+                    }
+                }
+                else
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    if (Platform.ToUpper() == "LINUX")
+                    {
+                        willCompile = true;
+                    }
+                }
+                else
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
+                {
+                    if (Platform.ToUpper() == "BSD")
+                    {
+                        willCompile = true;
+                    }
+                }
+                //switch (
+                //Environment.OSVersion.Platform)
+                //{
+                //    default:
+                //        break;
+                //}
+            }
 
+            if (willCompile)
+            {
+            
+            }
         }
     }
 }
