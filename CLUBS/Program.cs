@@ -1,6 +1,5 @@
 ﻿using CLUBS.Core;
 using CLUBS.Tools;
-using CLUBS.Tools.Windows;
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -9,6 +8,7 @@ namespace CLUBS
 {
     class Program
     {
+        public static Version ShellVerison = new Version(1, 0, 0, 0);
         static void Main(string[] args)
         {
             Console.WriteLine("CLUBS - Creeper Lv's Universal Build System");
@@ -17,6 +17,7 @@ namespace CLUBS
                 Console.WriteLine("Running on Windows.");
             }
             Repo repo = null;
+            bool willCompile = false;
             Operations operation = Operations.Repo;
             if (args.Length == 0)
             {
@@ -40,7 +41,7 @@ namespace CLUBS
                 {
                     case "COMPILE":
                         {
-
+                            willCompile = true;
                         }
                         break;
                     case "HELP":
@@ -80,7 +81,12 @@ namespace CLUBS
                     {
                         if (repo == null)
                         {
+                            
                             repo = new Repo(new DirectoryInfo(new DirectoryInfo(".").FullName));
+                            if (willCompile == true)
+                            {
+                                repo.Compile();
+                            }
                         }
                     }
                     break;
@@ -92,7 +98,7 @@ namespace CLUBS
                         Console.WriteLine("---------");
                         foreach (var item in ToolConfig.DefaultConfig.ToolPair)
                         {
-                            Console.WriteLine($"{item.Key}:{item.Value.OriginalString} -> {item.Value.RealPath}");
+                            Console.WriteLine($"{(item.Value.isExists ? "[·]" : "[X]")}{item.Key}:{item.Value.OriginalString} -> {item.Value.RealPath}");
                         }
                         try
                         {
@@ -104,7 +110,7 @@ namespace CLUBS
                             Console.WriteLine("---------");
                             foreach (var item in repo.CustomedTools.ToolPair)
                             {
-                                Console.WriteLine($"{item.Key}:{item.Value.OriginalString} -> {item.Value.RealPath}");
+                                Console.WriteLine($"{(item.Value.isExists ? "[·]" : "[X]")}{item.Key}:{item.Value.OriginalString} -> {item.Value.RealPath}");
                             }
                         }
                         catch (Exception)
@@ -118,6 +124,13 @@ namespace CLUBS
                     }
                     break;
                 case Operations.Version:
+                    {
+                        Console.WriteLine("Shell:"+ShellVerison);
+                        Console.WriteLine("Core:"+CoreLib.LibVersion);
+                        Console.WriteLine("ToolsLib:"+ToolsLib.LibVersion);
+                        Console.WriteLine("Default Tools Definition:"+ToolsInfo.ToolsInfoVer);
+                        Console.WriteLine("Default Tools Definition:"+ToolsInfo.CFG_PLATFORM);
+                    }
                     break;
                 case Operations.Help:
                     break;

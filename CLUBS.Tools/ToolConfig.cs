@@ -43,6 +43,7 @@ namespace CLUBS.Tools
     {
         public string OriginalString;
         public string RealPath;
+        public bool isExists=true;
         public Tool(string Original)
         {
             OriginalString = Original;
@@ -51,10 +52,15 @@ namespace CLUBS.Tools
             {
                 RealPath = RealPath.Substring("(BIN)".Length);
                 RealPath = RealPath.Replace("[ProgFiles]", Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
-                if (RealPath.IndexOf("[NewestFolder]") > 0)
+                while (RealPath.IndexOf("[NewestFolder]") > 0)
                 {
                     var Pre = RealPath.Substring(0, RealPath.IndexOf("[NewestFolder]"));
                     var D = new DirectoryInfo(Pre);
+                    if (!D.Exists)
+                    {
+                        isExists = false;
+                        return;
+                    }
                     var Fs=D.EnumerateDirectories();
                     DirectoryInfo result = null;
                     foreach (var item in Fs)
@@ -71,7 +77,11 @@ namespace CLUBS.Tools
                             }
                         }
                     }
-                    RealPath = RealPath.Replace("[NewestFolder]", result.Name);
+                    RealPath =Pre+result.Name+ RealPath.Substring(RealPath.IndexOf("[NewestFolder]")+ "[NewestFolder]".Length);
+                }
+                if (!File.Exists(RealPath))
+                {
+                    isExists = false;
                 }
             }
         }

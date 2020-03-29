@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "CLUBS": {
+      "commandName": "Project",
+      "commandLineArgs": "version",
+      "nativeDebugging": false
+    }
+  }
+}
