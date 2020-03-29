@@ -32,6 +32,8 @@ namespace CLUBS.Core
         }
         private void Load()
         {
+            if (!RepoManifest.Exists)
+                throw new Exception("Not a CLUBS repo!");
             var content_Lines = File.ReadAllLines(RepoManifest.FullName);
             for (int i = 0; i < content_Lines.Length; i++)
             {

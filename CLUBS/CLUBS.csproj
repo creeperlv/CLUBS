@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -9,5 +9,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CLUBS.Core\CLUBS.Core.csproj" />
+    <ProjectReference Include="..\CLUBS.Tools.Windows\CLUBS.Tools.Windows.csproj" />
+    <ProjectReference Include="..\CLUBS.Tools\CLUBS.Tools.csproj" />
   </ItemGroup>
 </Project>

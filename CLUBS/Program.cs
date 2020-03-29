@@ -1,4 +1,6 @@
 ﻿using CLUBS.Core;
+using CLUBS.Tools;
+using CLUBS.Tools.Windows;
 using System;
 using System.IO;
 
@@ -9,9 +11,12 @@ namespace CLUBS
         static void Main(string[] args)
         {
             Console.WriteLine("CLUBS - Creeper Lv's Universal Build System");
-            Repo repo;
-            repo = new Repo(new DirectoryInfo(new DirectoryInfo(".").FullName));
-            bool willCompile = false;
+            Repo repo = null;
+            Operations operation = Operations.Repo;
+            if (args.Length == 0)
+            {
+                operation = Operations.Help;
+            }
             for (int i = 0; i < args.Length; i++)
             {
                 if (i == 0)
@@ -19,7 +24,8 @@ namespace CLUBS
                     if (Directory.Exists(args[i]))
                     {
                         repo = new Repo(new DirectoryInfo(args[i]));
-                    }else
+                    }
+                    else
                     if (File.Exists(args[i]))
                     {
                         repo = new Repo(new FileInfo(args[i]));
@@ -29,22 +35,30 @@ namespace CLUBS
                 {
                     case "COMPILE":
                         {
-                        
+
                         }
                         break;
                     case "HELP":
                         {
-                        
+
+                            operation = Operations.Help;
                         }
                         break;
                     case "CONFIG":
                         {
                             //clubs config -g xxxxx xxxx
-                            var scope=args[i + 1];
+                            var scope = args[i + 1];
                         }
                         break;
                     case "VERSION":
                         {
+                            operation = Operations.Version;
+
+                        }
+                        break;
+                    case "TOOLS":
+                        {
+                            operation = Operations.Tools;
 
                         }
                         break;
@@ -55,6 +69,39 @@ namespace CLUBS
                         break;
                 }
             }
+            switch (operation)
+            {
+                case Operations.Repo:
+                    {
+                        if (repo == null)
+                        {
+
+                            repo = new Repo(new DirectoryInfo(new DirectoryInfo(".").FullName));
+                        }
+                    }
+                    break;
+                case Operations.Tools:
+                    {
+                        Console.WriteLine("Recorded Tools:");
+                        Console.WriteLine("");
+                        Console.WriteLine("---------");
+                        foreach (var item in ToolConfig.DefaultConfig.ToolPair)
+                        {
+                            Console.WriteLine($"{item.Key}:{item.Value.OriginalString} -> {item.Value.RealPath}");
+                        }
+                    }
+                    break;
+                case Operations.Version:
+                    break;
+                case Operations.Help:
+                    break;
+                default:
+                    break;
+            }
+        }
+        enum Operations
+        {
+            Repo, Tools, Version, Help
         }
     }
 }

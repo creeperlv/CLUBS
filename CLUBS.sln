@@ -5,9 +5,11 @@ VisualStudioVersion = 16.0.29924.181
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLUBS.Core", "CLUBS.Core\CLUBS.Core.csproj", "{9373DCD9-F1A2-4D5D-B926-CCC15D1875C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLUBS", "CLUBS\CLUBS.csproj", "{47FC98CE-C9B2-4C99-9D96-D2DB4F67BF21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLUBS", "CLUBS\CLUBS.csproj", "{47FC98CE-C9B2-4C99-9D96-D2DB4F67BF21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLUBS.Tools", "CLUBS.Tools\CLUBS.Tools.csproj", "{484BF25B-0473-44C6-AE43-E8D672FEEC9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLUBS.Tools", "CLUBS.Tools\CLUBS.Tools.csproj", "{484BF25B-0473-44C6-AE43-E8D672FEEC9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLUBS.Tools.Windows", "CLUBS.Tools.Windows\CLUBS.Tools.Windows.csproj", "{D9D95008-77CA-4241-9A89-C0D43FE7D941}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{484BF25B-0473-44C6-AE43-E8D672FEEC9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{484BF25B-0473-44C6-AE43-E8D672FEEC9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{484BF25B-0473-44C6-AE43-E8D672FEEC9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9D95008-77CA-4241-9A89-C0D43FE7D941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9D95008-77CA-4241-9A89-C0D43FE7D941}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9D95008-77CA-4241-9A89-C0D43FE7D941}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9D95008-77CA-4241-9A89-C0D43FE7D941}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
