@@ -32,13 +32,17 @@ namespace CLUBS.Core
          * 
          **/
         public Dictionary<string, string> ImportFiles = new Dictionary<string, string>();
-
+        public string WorkingDirectory = "";
         public List<string> CompileCommands = new List<string>();
         public Dictionary<string, string> ExportFiles = new Dictionary<string, string>();
         public static Project Load(FileInfo ProjectManifest)
         {
             Project project = new Project();
+            var mani = File.ReadAllLines(ProjectManifest.FullName);
+            for (int i = 0; i < mani.Length; i++)
+            {
 
+            }
             return project;
         }
         public void Compile()

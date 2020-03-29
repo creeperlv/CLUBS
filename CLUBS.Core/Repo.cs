@@ -10,15 +10,40 @@ namespace CLUBS.Core
     [Serializable]
     public class Repo
     {
-
+        public DirectoryInfo RepoDirectory;
+        public FileInfo RepoManifest;
         public List<string> Dependencies = new List<string>();
         public List<Project> Projects = new List<Project>();
         public Repo(DirectoryInfo RepoDir)
         {
+            RepoDirectory = RepoDir;
+            RepoManifest = new FileInfo(Path.Combine(RepoDir.FullName, ".clubsrepo"));
+            Load();
         }
         public Repo(FileInfo Manifest)
         {
-        
+            RepoManifest = Manifest;
+            RepoDirectory = Manifest.Directory;
+            Load();
+        }
+        public void Reload()
+        {
+            Load();
+        }
+        private void Load()
+        {
+            var content_Lines = File.ReadAllLines(RepoManifest.FullName);
+            for (int i = 0; i < content_Lines.Length; i++)
+            {
+                if (content_Lines[i].StartsWith("Dep:"))
+                {
+                    Dependencies.Add(content_Lines[i].Substring("Dep:".Length));
+                }
+                else if (content_Lines[i].StartsWith("Project:"))
+                {
+                    Projects.Add(Project.Load(new FileInfo(Path.Combine(RepoDirectory.FullName, content_Lines[i].Substring("Project:".Length)))));
+                }
+            }
         }
         public void Compile()
         {
