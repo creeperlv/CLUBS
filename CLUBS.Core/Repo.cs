@@ -1,4 +1,5 @@
-﻿using CLUBS.Tools;
+﻿using CLUBS.Core.Diagnostics;
+using CLUBS.Tools;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -53,9 +54,24 @@ namespace CLUBS.Core
                 }
             }
         }
+        public bool CheckDependencies()
+        {
+            return true;
+        }
         public void Compile()
         {
-        
+            if (CheckDependencies())
+            {
+                foreach (var item in Projects)
+                {
+                    item.Compile();
+                }
+            }
+            else
+            {
+                Logger.CurrentLogger.Log("Fetal: Did Not Match Dependencies!", LogLevel.Error);
+            }
+
         }
     }
 }

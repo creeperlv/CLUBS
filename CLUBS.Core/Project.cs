@@ -106,20 +106,21 @@ namespace CLUBS.Core
                         willCompile = true;
                     }
                 }
-                else
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
-                {
-                    if (Platform.ToUpper() == "BSD")
-                    {
-                        willCompile = true;
-                    }
-                }
+                //else
+                //if (RuntimeInformation.IsOSPlatform(OSPlatform.FreeBSD))
+                //{
+                //    if (Platform.ToUpper() == "BSD")
+                //    {
+                //        willCompile = true;
+                //    }
+                //}
                 //switch (
                 //Environment.OSVersion.Platform)
                 //{
                 //    default:
                 //        break;
                 //}
+                //These code won't work on .netstandard 2.1, only work on .NET 5.
             }
 
             if (willCompile)
