@@ -2,6 +2,7 @@
 using CLUBS.Tools;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -50,12 +51,84 @@ namespace CLUBS.Core
                 }
                 else if (content_Lines[i].StartsWith("CustomedTools:"))
                 {
-                    CustomedTools=ToolConfig.ResolveFromFile(new FileInfo(Path.Combine(RepoDirectory.FullName, content_Lines[i].Substring("Project:".Length))).FullName);
+                    CustomedTools = ToolConfig.ResolveFromFile(new FileInfo(Path.Combine(RepoDirectory.FullName, content_Lines[i].Substring("Project:".Length))).FullName);
                 }
             }
         }
         public bool CheckDependencies()
         {
+            foreach (var item in Dependencies)
+            {
+                bool isFind = false;
+                {
+                    foreach (var deftool in ToolConfig.DefaultConfig.ToolPair)
+                    {
+                        if (isFind == false)
+                            if (deftool.Key.ToUpper() == item.ToUpper())
+                            {
+                                if (deftool.Value.isFile == true)
+                                {
+                                    if (deftool.Value.isExists == true)
+                                    {
+                                        isFind = true;
+                                    }
+                                    else
+                                        return false;
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        ProcessStartInfo processStartInfo = new ProcessStartInfo(deftool.Value.OriginalString);
+                                        processStartInfo.CreateNoWindow = true;
+                                        processStartInfo.RedirectStandardOutput = true;
+                                        processStartInfo.RedirectStandardInput = true;
+                                        var p = Process.Start(processStartInfo);
+                                        p.Kill();
+                                        isFind = true;
+                                    }
+                                    catch (Exception)
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }
+                    }
+                    foreach (var deftool in CustomedTools.ToolPair)
+                    {
+                        if (isFind == false)
+                            if (deftool.Key.ToUpper() == item.ToUpper())
+                            {
+                                if (deftool.Value.isFile == true)
+                                {
+                                    if (deftool.Value.isExists == true)
+                                    {
+                                        isFind = true;
+                                    }
+                                    else
+                                        return false;
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        ProcessStartInfo processStartInfo = new ProcessStartInfo(deftool.Value.OriginalString);
+                                        processStartInfo.CreateNoWindow = true;
+                                        processStartInfo.RedirectStandardOutput = true;
+                                        processStartInfo.RedirectStandardInput = true;
+                                        var p = Process.Start(processStartInfo);
+                                        p.Kill();
+                                        isFind = true;
+                                    }
+                                    catch (Exception)
+                                    {
+                                        return false;
+                                    }
+                                }
+                            }
+                    }
+                }
+            }
             return true;
         }
         public void Compile()

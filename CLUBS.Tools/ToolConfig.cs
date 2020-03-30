@@ -11,7 +11,7 @@ namespace CLUBS.Tools
     [Serializable]
     public class ToolConfig
     {
-        public static ToolConfig DefaultConfig { get;private set; } = GetDefaultConfig();
+        public static ToolConfig DefaultConfig { get; private set; } = GetDefaultConfig();
         static ToolConfig GetDefaultConfig()
         {
             var f = new FileInfo(
@@ -31,7 +31,7 @@ namespace CLUBS.Tools
                 }
                 else
                 {
-                    toolConfig.ToolPair.Add(item.Substring(0, item.IndexOf('=')),new Tool( item.Substring(item.IndexOf('=') + 1)));
+                    toolConfig.ToolPair.Add(item.Substring(0, item.IndexOf('=')), new Tool(item.Substring(item.IndexOf('=') + 1)));
                 }
 
             }
@@ -43,13 +43,15 @@ namespace CLUBS.Tools
     {
         public string OriginalString;
         public string RealPath;
-        public bool isExists=true;
+        public bool isExists = true;
+        public bool isFile = false;
         public Tool(string Original)
         {
             OriginalString = Original;
             RealPath = Original;
             if (Original.StartsWith("(BIN)"))
             {
+                isFile = true;
                 RealPath = RealPath.Substring("(BIN)".Length);
                 RealPath = RealPath.Replace("[ProgFiles]", Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
                 while (RealPath.IndexOf("[NewestFolder]") > 0)
@@ -61,7 +63,7 @@ namespace CLUBS.Tools
                         isExists = false;
                         return;
                     }
-                    var Fs=D.EnumerateDirectories();
+                    var Fs = D.EnumerateDirectories();
                     DirectoryInfo result = null;
                     foreach (var item in Fs)
                     {
@@ -77,7 +79,7 @@ namespace CLUBS.Tools
                             }
                         }
                     }
-                    RealPath =Pre+result.Name+ RealPath.Substring(RealPath.IndexOf("[NewestFolder]")+ "[NewestFolder]".Length);
+                    RealPath = Pre + result.Name + RealPath.Substring(RealPath.IndexOf("[NewestFolder]") + "[NewestFolder]".Length);
                 }
                 if (!File.Exists(RealPath))
                 {

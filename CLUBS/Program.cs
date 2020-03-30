@@ -1,6 +1,7 @@
 ﻿using CLUBS.Core;
 using CLUBS.Tools;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -11,6 +12,19 @@ namespace CLUBS
         public static Version ShellVerison = new Version(1, 0, 0, 0);
         static void Main(string[] args)
         {
+            {
+                //try
+                //{
+                //    var p=Process.Start("javac");
+                //    p.Close();
+                //}
+                //catch (Exception e)
+                //{
+                //    Console.WriteLine("javac does not exist");
+                //}
+                //Use this to judge weather a command exist on Windows(Also availiable on Linux).
+                //On Linux, use "command -v CMD |wc -l"
+            }
             Console.WriteLine("CLUBS - Creeper Lv's Universal Build System");
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
