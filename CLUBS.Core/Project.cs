@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CLUBS.Tools;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -16,6 +18,7 @@ namespace CLUBS.Core
         {
             get; private set;
         }
+        public Repo parentRepo;
         public string Platform = "Any";
         public string Configuration = "All";
         /**
@@ -38,9 +41,11 @@ namespace CLUBS.Core
         public List<string> CompileCommands = new List<string>();
         public List<string> DeleteItems = new List<string>();
         public Dictionary<string, string> ExportFiles = new Dictionary<string, string>();
-        public static Project Load(FileInfo ProjectManifest)
+        public static Project Load(FileInfo ProjectManifest, Repo Parent)
         {
+
             Project project = new Project();
+            project.parentRepo = Parent;
             var mani = File.ReadAllLines(ProjectManifest.FullName);
             for (int i = 0; i < mani.Length; i++)
             {
@@ -147,7 +152,142 @@ namespace CLUBS.Core
                 {
                     //Process import files first.
                 }
+                {
+                    //Process Commands.
+                    foreach (var item in CompileCommands)
+                    {
+                        ExecuteCommand(item);
+                    }
+                }
             }
+        }
+        public void ExecuteCommand(string cmd)
+        {
+            if (cmd.IndexOf(" ") > 0)
+            {
+                string rCmd = cmd.Substring(0, cmd.IndexOf(" ")).Trim();
+                string Args = cmd.Substring(cmd.IndexOf(" ") + 1).Trim();
+                if (InternelCommands(rCmd, Args))
+                {
+                    var item = rCmd;
+                    {
+                        bool isFind = false;
+                        {
+                            foreach (var deftool in parentRepo.CustomedTools.ToolPair)
+                            {
+                                if (isFind == false)
+                                    if (deftool.Key.ToUpper() == item.ToUpper())
+                                    {
+                                        if (deftool.Value.isFile == true)
+                                        {
+                                            if (deftool.Value.isExists == true)
+                                            {
+                                                isFind = true;
+                                                try
+                                                {
+                                                    ProcessStartInfo processStartInfo = new ProcessStartInfo(deftool.Value.RealPath);
+                                                    processStartInfo.Arguments = Args;
+                                                    processStartInfo.CreateNoWindow = true;
+                                                    processStartInfo.RedirectStandardOutput = true;
+                                                    processStartInfo.RedirectStandardInput = true;
+                                                    var p = Process.Start(processStartInfo);
+
+                                                    isFind = true;
+                                                }
+                                                catch (Exception)
+                                                {
+                                                    throw new Exception("CLUBS_ERR:002");
+                                                }
+                                            }
+                                            else
+                                            {
+                                            }
+                                        }
+                                        else
+                                        {
+                                            try
+                                            {
+                                                ProcessStartInfo processStartInfo = new ProcessStartInfo(deftool.Value.OriginalString);
+                                                processStartInfo.Arguments = Args;
+                                                processStartInfo.CreateNoWindow = true;
+                                                processStartInfo.RedirectStandardOutput = true;
+                                                processStartInfo.RedirectStandardInput = true;
+                                                var p = Process.Start(processStartInfo);
+                                                isFind = true;
+                                            }
+                                            catch (Exception)
+                                            {
+                                                throw new Exception("CLUBS_ERR:002");
+                                            }
+                                        }
+                                    }
+                            }
+
+                            if (isFind == false)
+                                foreach (var deftool in ToolConfig.DefaultConfig.ToolPair)
+                                {
+                                    if (isFind == false)
+                                        if (deftool.Key.ToUpper() == item.ToUpper())
+                                        {
+                                            if (deftool.Value.isFile == true)
+                                            {
+                                                if (deftool.Value.isExists == true)
+                                                {
+                                                    isFind = true;
+                                                    try
+                                                    {
+                                                        ProcessStartInfo processStartInfo = new ProcessStartInfo(deftool.Value.RealPath);
+                                                        processStartInfo.Arguments = Args;
+                                                        processStartInfo.CreateNoWindow = true;
+                                                        processStartInfo.RedirectStandardOutput = true;
+                                                        processStartInfo.RedirectStandardInput = true;
+                                                        var p = Process.Start(processStartInfo);
+
+                                                        isFind = true;
+                                                    }
+                                                    catch (Exception)
+                                                    {
+                                                        throw new Exception("CLUBS_ERR:002");
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    throw new Exception("CLUBS_ERR:001");
+
+                                                }
+                                            }
+                                            else
+                                            {
+                                                try
+                                                {
+                                                    ProcessStartInfo processStartInfo = new ProcessStartInfo(deftool.Value.OriginalString);
+                                                    processStartInfo.Arguments = Args;
+                                                    processStartInfo.CreateNoWindow = true;
+                                                    processStartInfo.RedirectStandardOutput = true;
+                                                    processStartInfo.RedirectStandardInput = true;
+                                                    var p = Process.Start(processStartInfo);
+                                                    isFind = true;
+                                                }
+                                                catch (Exception)
+                                                {
+                                                    throw new Exception("CLUBS_ERR:002");
+                                                }
+                                            }
+                                        }
+                                }
+
+                        }
+                    }
+                }
+            }
+            else
+            {
+            }
+
+        }
+        public bool InternelCommands(string cmd, string args = "")
+        {
+            return false;
         }
     }
 }

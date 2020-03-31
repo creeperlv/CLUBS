@@ -48,7 +48,7 @@ namespace CLUBS.Core
                 }
                 else if (content_Lines[i].StartsWith("Project:"))
                 {
-                    Projects.Add(Project.Load(new FileInfo(Path.Combine(RepoDirectory.FullName, content_Lines[i].Substring("Project:".Length)))));
+                    Projects.Add(Project.Load(new FileInfo(Path.Combine(RepoDirectory.FullName, content_Lines[i].Substring("Project:".Length))), this));
                 }
                 else if (content_Lines[i].StartsWith("CustomedTools:"))
                 {

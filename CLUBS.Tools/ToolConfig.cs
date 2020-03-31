@@ -33,7 +33,7 @@ namespace CLUBS.Tools
                 }
                 else
                 {
-                    toolConfig.ToolPair.Add(item.Substring(0, item.IndexOf('=')), new Tool(item.Substring(item.IndexOf('=') + 1)));
+                    toolConfig.ToolPair.Add(item.Substring(0, item.IndexOf('=')).Trim(), new Tool(item.Substring(item.IndexOf('=') + 1).Trim()));
                 }
 
             }
