@@ -17,6 +17,7 @@ namespace CLUBS.Core
         public FileInfo RepoManifest;
         public List<string> Dependencies = new List<string>();
         public ToolConfig CustomedTools;
+        public string DefaultConfiguration = "Debug";
         public List<Project> Projects = new List<Project>();
         public Repo(DirectoryInfo RepoDir)
         {
@@ -131,13 +132,13 @@ namespace CLUBS.Core
             }
             return true;
         }
-        public void Compile()
+        public void Compile(string Config)
         {
             if (CheckDependencies())
             {
                 foreach (var item in Projects)
                 {
-                    item.Compile();
+                    item.Compile(Config);
                 }
             }
             else

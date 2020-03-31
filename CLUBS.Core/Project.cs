@@ -17,6 +17,7 @@ namespace CLUBS.Core
             get; private set;
         }
         public string Platform = "Any";
+        public string Configuration = "All";
         /**
          * 
          * Determine if will build on os.
@@ -74,7 +75,7 @@ namespace CLUBS.Core
             }
             return project;
         }
-        public void Compile()
+        public void Compile(string Config)
         {
             bool willCompile = false;
             if (Platform == "Any")
@@ -122,10 +123,30 @@ namespace CLUBS.Core
                 //}
                 //These code won't work on .netstandard 2.1, only work on .NET 5.
             }
+            if (willCompile == true)
+            {
+                //Check Configuration.
+                if (Configuration == "All")
+                {
+                    willCompile = true;
+                }
+                else
+                {
+                    if (Configuration.ToUpper().IndexOf(Config.ToUpper()) != -1)
+                    {
+                        willCompile = true;
+
+                    }
+                    else
+                        willCompile = false;
+                }
+            }
 
             if (willCompile)
             {
-            
+                {
+                    //Process import files first.
+                }
             }
         }
     }

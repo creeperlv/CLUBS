@@ -12,10 +12,12 @@ namespace CLUBS.Tools
     public class ToolConfig
     {
         public static ToolConfig DefaultConfig { get; private set; } = GetDefaultConfig();
+        internal static string CLUBS = "";
         static ToolConfig GetDefaultConfig()
         {
             var f = new FileInfo(
             Process.GetCurrentProcess().MainModule.FileName);
+            CLUBS = f.Directory.FullName;
             return ResolveFromFile(Path.Combine(f.Directory.FullName, "Config", "Tools.cfg"));
         }
         public Dictionary<string, Tool> ToolPair = new Dictionary<string, Tool>();
@@ -54,6 +56,7 @@ namespace CLUBS.Tools
                 isFile = true;
                 RealPath = RealPath.Substring("(BIN)".Length);
                 RealPath = RealPath.Replace("[ProgFiles]", Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
+                RealPath = RealPath.Replace("[CLUBS]", ToolConfig.CLUBS);
                 while (RealPath.IndexOf("[NewestFolder]") > 0)
                 {
                     var Pre = RealPath.Substring(0, RealPath.IndexOf("[NewestFolder]"));

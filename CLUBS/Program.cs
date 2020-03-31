@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace CLUBS
 {
@@ -15,7 +16,7 @@ namespace CLUBS
             {
                 //try
                 //{
-                //    var p=Process.Start("javac");
+                    //var p = Process.Start("dotnet", "--list-sdks");
                 //    p.Close();
                 //}
                 //catch (Exception e)
@@ -26,10 +27,9 @@ namespace CLUBS
                 //On Linux, use "command -v CMD |wc -l"
             }
             Console.WriteLine("CLUBS - Creeper Lv's Universal Build System");
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                Console.WriteLine("Running on Windows.");
-            }
+
+            Console.OutputEncoding = Encoding.Unicode;
+            string ConfigurationOverride = "";
             Repo repo = null;
             bool willCompile = false;
             Operations operation = Operations.Repo;
@@ -84,7 +84,10 @@ namespace CLUBS
                         break;
                     default:
                         {
-
+                            if (args[i].StartsWith("-c:"))
+                            {
+                                ConfigurationOverride = args[i].Substring("-c:".Length);
+                            }
                         }
                         break;
                 }
@@ -99,7 +102,7 @@ namespace CLUBS
                             repo = new Repo(new DirectoryInfo(new DirectoryInfo(".").FullName));
                             if (willCompile == true)
                             {
-                                repo.Compile();
+                                repo.Compile(ConfigurationOverride==""? repo.DefaultConfiguration:ConfigurationOverride);
                             }
                         }
                     }
@@ -112,7 +115,7 @@ namespace CLUBS
                         Console.WriteLine("---------");
                         foreach (var item in ToolConfig.DefaultConfig.ToolPair)
                         {
-                            Console.WriteLine($"{(item.Value.isExists ? "[·]" : "[X]")}{item.Key}:{item.Value.OriginalString} -> {item.Value.RealPath}");
+                            Console.WriteLine($"{(item.Value.isFile ? "[❓]" : item.Value.isExists ? "[✔]" : "[❌]")}{item.Key}:{item.Value.OriginalString} -> {item.Value.RealPath}");
                         }
                         try
                         {
@@ -124,7 +127,7 @@ namespace CLUBS
                             Console.WriteLine("---------");
                             foreach (var item in repo.CustomedTools.ToolPair)
                             {
-                                Console.WriteLine($"{(item.Value.isExists ? "[·]" : "[X]")}{item.Key}:{item.Value.OriginalString} -> {item.Value.RealPath}");
+                                Console.WriteLine($"{(item.Value.isFile?"[❓]": item.Value.isExists ? "[✔]" : "[❌]")}{item.Key}:{item.Value.OriginalString} -> {item.Value.RealPath}");
                             }
                         }
                         catch (Exception)
@@ -144,6 +147,7 @@ namespace CLUBS
                         Console.WriteLine("ToolsLib:"+ToolsLib.LibVersion);
                         Console.WriteLine("Default Tools Definition:"+ToolsInfo.ToolsInfoVer);
                         Console.WriteLine("Default Tools Definition:"+ToolsInfo.CFG_PLATFORM);
+                        Console.WriteLine("Runtime:"+RuntimeInformation.FrameworkDescription);
                     }
                     break;
                 case Operations.Help:
