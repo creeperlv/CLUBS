@@ -12,7 +12,7 @@ namespace CLUBS.Core
 {
 
     [Serializable]
-    public class Project
+    public class CLUBSTask
     {
         public FileInfo ProjectManifest
         {
@@ -41,44 +41,58 @@ namespace CLUBS.Core
         public List<string> CompileCommands = new List<string>();
         public List<string> DeleteItems = new List<string>();
         public Dictionary<string, string> ExportFiles = new Dictionary<string, string>();
-        public static Project Load(FileInfo ProjectManifest, Repo Parent)
+        public static CLUBSTask Load(FileInfo ProjectManifest, Repo Parent)
         {
 
-            Project project = new Project();
-            project.parentRepo = Parent;
+            CLUBSTask task = new CLUBSTask();
+            task.parentRepo = Parent;
             var mani = File.ReadAllLines(ProjectManifest.FullName);
             for (int i = 0; i < mani.Length; i++)
             {
                 if (mani[i].StartsWith("WorkingDirectory "))
                 {
-                    project.WorkingDirectory = mani[i].Substring("WorkingDirectory ".Length);
+                    task.WorkingDirectory = mani[i].Substring("WorkingDirectory ".Length);
+                    if (Directory.Exists(task.WorkingDirectory))
+                    {
+                        task.WorkingDirectory = new DirectoryInfo(task.WorkingDirectory).FullName;
+                    }
+                    else
+                    {
+                        task.WorkingDirectory = new DirectoryInfo(Path.Combine(new DirectoryInfo(".").FullName, task.WorkingDirectory)).FullName;
+
+                    }
                 }
                 else if (mani[i].StartsWith("Platform "))
                 {
-                    project.Platform = mani[i].Substring("Platform ".Length);
+                    task.Platform = mani[i].Substring("Platform ".Length);
                 }
                 else if (mani[i].StartsWith("ImportFile "))
                 {
                     var f = mani[i].Substring("ImportFile ".Length);
-                    project.ImportFiles.Add(f.Substring(0, f.IndexOf('=')), f.Substring(f.IndexOf('=')));
+                    task.ImportFiles.Add(f.Substring(0, f.IndexOf('=')), f.Substring(f.IndexOf('=')));
+                }
+                else if (mani[i].StartsWith("TempImportFile "))
+                {
+                    var f = mani[i].Substring("TempImportFile ".Length);
+                    task.TempImportFiles.Add(f.Substring(0, f.IndexOf('=')), f.Substring(f.IndexOf('=')));
                 }
                 else if (mani[i].StartsWith("ExportFile "))
                 {
                     var f = mani[i].Substring("ExportFile ".Length);
-                    project.ExportFiles.Add(f.Substring(0, f.IndexOf('=')), f.Substring(f.IndexOf('=')));
+                    task.ExportFiles.Add(f.Substring(0, f.IndexOf('=')), f.Substring(f.IndexOf('=')));
                 }
                 else if (mani[i].StartsWith("CMD "))
                 {
                     var cmd = mani[i].Substring("CMD ".Length);
-                    project.CompileCommands.Add(cmd);
+                    task.CompileCommands.Add(cmd);
                 }
                 else if (mani[i].StartsWith("Delete "))
                 {
                     var DeleteItem = mani[i].Substring("Delete ".Length);
-                    project.DeleteItems.Add(DeleteItem);
+                    task.DeleteItems.Add(DeleteItem);
                 }
             }
-            return project;
+            return task;
         }
         public void Compile(string Config)
         {
@@ -187,9 +201,7 @@ namespace CLUBS.Core
                                                 {
                                                     ProcessStartInfo processStartInfo = new ProcessStartInfo(deftool.Value.RealPath);
                                                     processStartInfo.Arguments = Args;
-                                                    processStartInfo.CreateNoWindow = true;
-                                                    processStartInfo.RedirectStandardOutput = true;
-                                                    processStartInfo.RedirectStandardInput = true;
+                                                    processStartInfo.WorkingDirectory = WorkingDirectory;
                                                     var p = Process.Start(processStartInfo);
 
                                                     isFind = true;
@@ -209,9 +221,7 @@ namespace CLUBS.Core
                                             {
                                                 ProcessStartInfo processStartInfo = new ProcessStartInfo(deftool.Value.OriginalString);
                                                 processStartInfo.Arguments = Args;
-                                                processStartInfo.CreateNoWindow = true;
-                                                processStartInfo.RedirectStandardOutput = true;
-                                                processStartInfo.RedirectStandardInput = true;
+                                                processStartInfo.WorkingDirectory = WorkingDirectory;
                                                 var p = Process.Start(processStartInfo);
                                                 isFind = true;
                                             }
@@ -238,9 +248,7 @@ namespace CLUBS.Core
                                                     {
                                                         ProcessStartInfo processStartInfo = new ProcessStartInfo(deftool.Value.RealPath);
                                                         processStartInfo.Arguments = Args;
-                                                        processStartInfo.CreateNoWindow = true;
-                                                        processStartInfo.RedirectStandardOutput = true;
-                                                        processStartInfo.RedirectStandardInput = true;
+                                                        processStartInfo.WorkingDirectory = WorkingDirectory;
                                                         var p = Process.Start(processStartInfo);
 
                                                         isFind = true;
@@ -262,9 +270,7 @@ namespace CLUBS.Core
                                                 {
                                                     ProcessStartInfo processStartInfo = new ProcessStartInfo(deftool.Value.OriginalString);
                                                     processStartInfo.Arguments = Args;
-                                                    processStartInfo.CreateNoWindow = true;
-                                                    processStartInfo.RedirectStandardOutput = true;
-                                                    processStartInfo.RedirectStandardInput = true;
+                                                    processStartInfo.WorkingDirectory = WorkingDirectory;
                                                     var p = Process.Start(processStartInfo);
                                                     isFind = true;
                                                 }

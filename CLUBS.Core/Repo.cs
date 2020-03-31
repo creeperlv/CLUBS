@@ -18,7 +18,7 @@ namespace CLUBS.Core
         public List<string> Dependencies = new List<string>();
         public ToolConfig CustomedTools;
         public string DefaultConfiguration = "Debug";
-        public List<Project> Projects = new List<Project>();
+        public List<CLUBSTask> Tasks = new List<CLUBSTask>();
         public Repo(DirectoryInfo RepoDir)
         {
             RepoDirectory = RepoDir;
@@ -42,18 +42,64 @@ namespace CLUBS.Core
             var content_Lines = File.ReadAllLines(RepoManifest.FullName);
             for (int i = 0; i < content_Lines.Length; i++)
             {
+                if (content_Lines[i].StartsWith("#"))
+                {
+                }else
                 if (content_Lines[i].StartsWith("Dep:"))
                 {
                     Dependencies.Add(content_Lines[i].Substring("Dep:".Length));
                 }
-                else if (content_Lines[i].StartsWith("Project:"))
+                else if (content_Lines[i].StartsWith("Task:"))
                 {
-                    Projects.Add(Project.Load(new FileInfo(Path.Combine(RepoDirectory.FullName, content_Lines[i].Substring("Project:".Length))), this));
+                    Tasks.Add(CLUBSTask.Load(new FileInfo(Path.Combine(RepoDirectory.FullName, content_Lines[i].Substring("Task:".Length))), this));
                 }
                 else if (content_Lines[i].StartsWith("CustomedTools:"))
                 {
-                    CustomedTools = ToolConfig.ResolveFromFile(new FileInfo(Path.Combine(RepoDirectory.FullName, content_Lines[i].Substring("Project:".Length))).FullName);
+                    CustomedTools = ToolConfig.ResolveFromFile(new FileInfo(Path.Combine(RepoDirectory.FullName, content_Lines[i].Substring("CustomedTools:".Length))).FullName);
                 }
+                else if (content_Lines[i].StartsWith("DefaultConfiguration:"))
+                {
+                    DefaultConfiguration = content_Lines[i].Substring("DefaultConfiguration:".Length);
+                }
+            }
+        }
+        public static void CreateNew()
+        {
+            {
+
+                string Template = @"[CLUBS Repo Template]
+#The character '#' is used for comment.
+#Dep:<string>
+#   This means your repo depends on certain tool.
+#
+#Task:<Task-File-Location>
+#   This represents tasks your repo will do during the compilation process.
+#
+Task:./default.task
+#CustomedTools:<Tool-Definitions-File>
+#   This defines customed tools your repo will use.
+#
+#DefaultConfiguration:<ConfigurationName>
+#   This defines the default configuration your repo will use, if it is not defined, the default value is 'Debug'.
+";
+                File.WriteAllText("./.clubsrepo", Template);
+            }
+            {
+
+                string Template = @"[CLUBS Task Template]
+#The character '#' is used for comment.
+#WorkingDirectory <Folder>
+#   Defines working directory of this task, it can be absolute and relative.
+#Platform <Any|Windows|Linux|macOS>
+#ImportFile <File>
+#TempImportFile <File>
+#   Import, then delete when the task completes.
+#ExportFile <File>
+#CMD <CMD>
+#   Command you want to execute.
+#Delete <File>
+";
+                File.WriteAllText("./default.task", Template);
             }
         }
         public bool CheckDependencies()
@@ -136,7 +182,7 @@ namespace CLUBS.Core
         {
             if (CheckDependencies())
             {
-                foreach (var item in Projects)
+                foreach (var item in Tasks)
                 {
                     item.Compile(Config);
                 }
