@@ -1,5 +1,6 @@
 [CLUBS Repo Template]
 #The character '#' is used for comment.
+Dep:dotnet
 #Dep:<string>
 #   This means your repo depends on certain tool.
 #
