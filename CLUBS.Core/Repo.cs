@@ -16,7 +16,7 @@ namespace CLUBS.Core
         public DirectoryInfo RepoDirectory;
         public FileInfo RepoManifest;
         public List<string> Dependencies = new List<string>();
-        public ToolConfig CustomedTools;
+        public ToolConfig CustomedTools=new ToolConfig();
         public string DefaultConfiguration = "Debug";
         public List<CLUBSTask> Tasks = new List<CLUBSTask>();
         public Repo(DirectoryInfo RepoDir)
@@ -75,7 +75,7 @@ namespace CLUBS.Core
 #Task:<Task-File-Location>
 #   This represents tasks your repo will do during the compilation process.
 #
-Task:./default.task
+Task:default.task
 #CustomedTools:<Tool-Definitions-File>
 #   This defines customed tools your repo will use.
 #
@@ -98,6 +98,9 @@ Task:./default.task
 #CMD <CMD>
 #   Command you want to execute.
 #Delete <File>
+#Configuration <ConfigurationName>
+Configuration All
+#   The configuration name that this task will run in.
 ";
                 File.WriteAllText("./default.task", Template);
             }
@@ -184,6 +187,7 @@ Task:./default.task
             {
                 foreach (var item in Tasks)
                 {
+                    Logger.CurrentLogger.Log("Task:"+item.ProjectManifest.Name, LogLevel.Normal);
                     item.Compile(Config);
                 }
             }

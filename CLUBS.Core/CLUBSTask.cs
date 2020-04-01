@@ -1,4 +1,5 @@
-﻿using CLUBS.Tools;
+﻿using CLUBS.Core.Diagnostics;
+using CLUBS.Tools;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -46,6 +47,7 @@ namespace CLUBS.Core
 
             CLUBSTask task = new CLUBSTask();
             task.parentRepo = Parent;
+            task.ProjectManifest = ProjectManifest;
             var mani = File.ReadAllLines(ProjectManifest.FullName);
             for (int i = 0; i < mani.Length; i++)
             {
@@ -65,6 +67,10 @@ namespace CLUBS.Core
                 else if (mani[i].StartsWith("Platform "))
                 {
                     task.Platform = mani[i].Substring("Platform ".Length);
+                }
+                else if (mani[i].StartsWith("Configuration "))
+                {
+                    task.Configuration = mani[i].Substring("Configuration ".Length);
                 }
                 else if (mani[i].StartsWith("ImportFile "))
                 {
@@ -174,14 +180,19 @@ namespace CLUBS.Core
                     }
                 }
             }
+            else
+            {
+                Logger.CurrentLogger.Log($"Task Skipped.",LogLevel.Normal);
+            }
         }
         public void ExecuteCommand(string cmd)
         {
+            Logger.CurrentLogger.Log($"Execute Command:"+cmd, LogLevel.Normal);
             if (cmd.IndexOf(" ") > 0)
             {
                 string rCmd = cmd.Substring(0, cmd.IndexOf(" ")).Trim();
                 string Args = cmd.Substring(cmd.IndexOf(" ") + 1).Trim();
-                if (InternelCommands(rCmd, Args))
+                if (InternelCommands(rCmd, Args)==false)
                 {
                     var item = rCmd;
                     {
@@ -250,7 +261,7 @@ namespace CLUBS.Core
                                                         processStartInfo.Arguments = Args;
                                                         processStartInfo.WorkingDirectory = WorkingDirectory;
                                                         var p = Process.Start(processStartInfo);
-
+                                                        p.WaitForExit();
                                                         isFind = true;
                                                     }
                                                     catch (Exception)

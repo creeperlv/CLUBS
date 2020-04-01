@@ -1,4 +1,5 @@
 ﻿using CLUBS.Core;
+using CLUBS.Core.Diagnostics;
 using CLUBS.Tools;
 using System;
 using System.Diagnostics;
@@ -56,11 +57,18 @@ namespace CLUBS
                     case "COMPILE":
                         {
                             willCompile = true;
+                            operation = Operations.Repo;
+                        }
+                        break;
+                    case "NEW":
+                        {
+                            willCompile = false;
+                            Repo.CreateNew();
+                            Logger.CurrentLogger.Log("New CLUBS Repo is created.", LogLevel.Normal);
                         }
                         break;
                     case "HELP":
                         {
-
                             operation = Operations.Help;
                         }
                         break;
@@ -68,6 +76,7 @@ namespace CLUBS
                         {
                             //clubs config -g xxxxx xxxx
                             var scope = args[i + 1];
+                            operation = Operations.Config;
                         }
                         break;
                     case "VERSION":
@@ -102,6 +111,7 @@ namespace CLUBS
                             repo = new Repo(new DirectoryInfo(new DirectoryInfo(".").FullName));
                             if (willCompile == true)
                             {
+                                Logger.CurrentLogger.Log("Starting...");
                                 repo.Compile(ConfigurationOverride==""? repo.DefaultConfiguration:ConfigurationOverride);
                             }
                         }
@@ -151,6 +161,8 @@ namespace CLUBS
                     }
                     break;
                 case Operations.Help:
+                    {
+                    }
                     break;
                 default:
                     break;
@@ -158,7 +170,7 @@ namespace CLUBS
         }
         enum Operations
         {
-            Repo, Tools, Version, Help
+            Repo, Tools, Version, Help,Config
         }
     }
 }

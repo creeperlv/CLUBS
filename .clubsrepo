@@ -1,0 +1,14 @@
+[CLUBS Repo Template]
+#The character '#' is used for comment.
+#Dep:<string>
+#   This means your repo depends on certain tool.
+#
+#Task:<Task-File-Location>
+#   This represents tasks your repo will do during the compilation process.
+#
+Task:default.task
+#CustomedTools:<Tool-Definitions-File>
+#   This defines customed tools your repo will use.
+#
+#DefaultConfiguration:<ConfigurationName>
+#   This defines the default configuration your repo will use, if it is not defined, the default value is 'Debug'.

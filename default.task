@@ -1,0 +1,14 @@
+[CLUBS Task Template]
+#The character '#' is used for comment.
+#WorkingDirectory <Folder>
+#   Defines working directory of this task, it can be absolute and relative.
+#Platform <Any|Windows|Linux|macOS>
+#ImportFile <File>
+#TempImportFile <File>
+#   Import, then delete when the task completes.
+#ExportFile <File>
+#CMD <CMD>
+#   Command you want to execute.
+#Delete <File>
+Configuration All
+CMD dotnet build
