@@ -181,7 +181,7 @@ Configuration All
             }
             return true;
         }
-        public void Compile(string Config)
+        public void Compile(CompileConfiguration Config)
         {
             if (CheckDependencies())
             {

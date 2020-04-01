@@ -100,7 +100,7 @@ namespace CLUBS.Core
             }
             return task;
         }
-        public void Compile(string Config)
+        public void Compile(CompileConfiguration Config)
         {
             bool willCompile = false;
             if (Platform == "Any")
@@ -157,7 +157,7 @@ namespace CLUBS.Core
                 }
                 else
                 {
-                    if (Configuration.ToUpper().IndexOf(Config.ToUpper()) != -1)
+                    if (Configuration.ToUpper().IndexOf(Config.configuration.ToUpper()) != -1)
                     {
                         willCompile = true;
 

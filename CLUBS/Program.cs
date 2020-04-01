@@ -14,21 +14,8 @@ namespace CLUBS
         public static Version ShellVerison = new Version(1, 0, 0, 0);
         static void Main(string[] args)
         {
-            {
-                //try
-                //{
-                    //var p = Process.Start("dotnet", "--list-sdks");
-                //    p.Close();
-                //}
-                //catch (Exception e)
-                //{
-                //    Console.WriteLine("javac does not exist");
-                //}
-                //Use this to judge weather a command exist on Windows(Also availiable on Linux).
-                //On Linux, use "command -v CMD |wc -l"
-            }
             Console.WriteLine("CLUBS - Creeper Lv's Universal Build System");
-
+            CompileConfiguration config = new CompileConfiguration();
             Console.OutputEncoding = Encoding.Unicode;
             string ConfigurationOverride = "";
             Repo repo = null;
@@ -91,6 +78,11 @@ namespace CLUBS
 
                         }
                         break;
+                    case "--IGNORE-DEPENDENCIES":
+                        {
+                            config.IgnoreDependencies = true;
+                        }
+                        break;
                     default:
                         {
                             if (args[i].StartsWith("-c:"))
@@ -107,12 +99,13 @@ namespace CLUBS
                     {
                         if (repo == null)
                         {
-                            
+
                             repo = new Repo(new DirectoryInfo(new DirectoryInfo(".").FullName));
                             if (willCompile == true)
                             {
                                 Logger.CurrentLogger.Log("Starting...");
-                                repo.Compile(ConfigurationOverride==""? repo.DefaultConfiguration:ConfigurationOverride);
+                                config.configuration = ConfigurationOverride == "" ? repo.DefaultConfiguration : ConfigurationOverride;
+                                repo.Compile(config);
                             }
                         }
                     }
@@ -137,7 +130,7 @@ namespace CLUBS
                             Console.WriteLine("---------");
                             foreach (var item in repo.CustomedTools.ToolPair)
                             {
-                                Console.WriteLine($"{(item.Value.isFile?"[❓]": item.Value.isExists ? "[✔]" : "[❌]")}{item.Key}:{item.Value.OriginalString} -> {item.Value.RealPath}");
+                                Console.WriteLine($"{(item.Value.isFile ? "[❓]" : item.Value.isExists ? "[✔]" : "[❌]")}{item.Key}:{item.Value.OriginalString} -> {item.Value.RealPath}");
                             }
                         }
                         catch (Exception)
@@ -152,12 +145,12 @@ namespace CLUBS
                     break;
                 case Operations.Version:
                     {
-                        Console.WriteLine("Shell:"+ShellVerison);
-                        Console.WriteLine("Core:"+CoreLib.LibVersion);
-                        Console.WriteLine("ToolsLib:"+ToolsLib.LibVersion);
-                        Console.WriteLine("Default Tools Definition:"+ToolsInfo.ToolsInfoVer);
-                        Console.WriteLine("Default Tools Definition:"+ToolsInfo.CFG_PLATFORM);
-                        Console.WriteLine("Runtime:"+RuntimeInformation.FrameworkDescription);
+                        Console.WriteLine("Shell:" + ShellVerison);
+                        Console.WriteLine("Core:" + CoreLib.LibVersion);
+                        Console.WriteLine("ToolsLib:" + ToolsLib.LibVersion);
+                        Console.WriteLine("Default Tools Definition:" + ToolsInfo.ToolsInfoVer);
+                        Console.WriteLine("Default Tools Definition:" + ToolsInfo.CFG_PLATFORM);
+                        Console.WriteLine("Runtime:" + RuntimeInformation.FrameworkDescription);
                     }
                     break;
                 case Operations.Help:
@@ -170,7 +163,7 @@ namespace CLUBS
         }
         enum Operations
         {
-            Repo, Tools, Version, Help,Config
+            Repo, Tools, Version, Help, Config
         }
     }
 }
