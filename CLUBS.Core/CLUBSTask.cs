@@ -175,16 +175,17 @@ namespace CLUBS.Core
                     {
                         if (!File.Exists(item.Key))
                         {
-
+                            File.Copy(item.Key, Path.Combine(parentRepo.RepoDirectory.FullName,item.Value));
                         }
                         else if (!Directory.Exists(item.Key))
                         {
-
+                            //Directory.cop
                         }
                         else
                         {
                             //Relative file or folder.
                             var FileItem= Path.Combine(parentRepo.RepoDirectory.FullName, item.Key);
+
                         }
 
                     }
