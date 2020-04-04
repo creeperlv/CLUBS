@@ -5,7 +5,11 @@ namespace CLUBS.Localization
 {
     public class Language
     {
-        public static Dictionary<string, string> RawData = new Dictionary<string, string>();
-
+        public Dictionary<string, string> RawData = new Dictionary<string, string>();
+        public static Language CurrentLanguage= new Language();
+        public Language()
+        {
+        
+        }
     }
 }

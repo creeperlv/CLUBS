@@ -16,7 +16,7 @@ namespace CLUBS.Core.Utilities
             }
             foreach (var item in oriD.EnumerateDirectories())
             {
-
+                CopyRecursively(item.FullName, Path.Combine(target, item.Name));
             }
         }
     }
