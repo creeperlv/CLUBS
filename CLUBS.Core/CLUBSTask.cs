@@ -171,6 +171,29 @@ namespace CLUBS.Core
             {
                 {
                     //Process import files first.
+                    foreach (var item in ImportFiles)
+                    {
+                        if (!File.Exists(item.Key))
+                        {
+
+                        }
+                        else if (!Directory.Exists(item.Key))
+                        {
+
+                        }
+                        else
+                        {
+                            //Relative file or folder.
+                            var FileItem= Path.Combine(parentRepo.RepoDirectory.FullName, item.Key);
+                        }
+
+                    }
+                }
+                {
+                    foreach (var item in TempImportFiles)
+                    {
+
+                    }
                 }
                 {
                     //Process Commands.

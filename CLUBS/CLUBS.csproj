@@ -5,7 +5,7 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-28731-01" />
+    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-28803-02" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CLUBS.Core\CLUBS.Core.csproj" />

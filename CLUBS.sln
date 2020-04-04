@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLUBS.Tools", "CLUBS.Tools\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLUBS.Tools.Windows", "CLUBS.Tools.Windows\CLUBS.Tools.Windows.csproj", "{D9D95008-77CA-4241-9A89-C0D43FE7D941}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLUBS.Tools.Linux", "CLUBS.Tools.Linux\CLUBS.Tools.Linux.csproj", "{CAC6504B-7A29-4833-9DE7-6320B1E5985E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLUBS.Tools.Linux", "CLUBS.Tools.Linux\CLUBS.Tools.Linux.csproj", "{CAC6504B-7A29-4833-9DE7-6320B1E5985E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLUBS.Localization", "CLUBS.Localization\CLUBS.Localization.csproj", "{BD84D708-ABB1-4C37-B699-D6A1695C5959}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{CAC6504B-7A29-4833-9DE7-6320B1E5985E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAC6504B-7A29-4833-9DE7-6320B1E5985E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAC6504B-7A29-4833-9DE7-6320B1E5985E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD84D708-ABB1-4C37-B699-D6A1695C5959}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD84D708-ABB1-4C37-B699-D6A1695C5959}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD84D708-ABB1-4C37-B699-D6A1695C5959}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD84D708-ABB1-4C37-B699-D6A1695C5959}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
