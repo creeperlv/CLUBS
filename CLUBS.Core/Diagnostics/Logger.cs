@@ -17,6 +17,20 @@ namespace CLUBS.Core.Diagnostics
     {
         public static ILogger CurrentLogger = new ConsoleLogger();
     }
+    public class ALittleBitAdvancedLogger : ILogger
+    {
+        public ALittleBitAdvancedLogger(Repo baseRepo)
+        {
+        
+        }
+        public void Log(string msg)
+        {
+        }
+
+        public void Log(string msg, LogLevel loglevel)
+        {
+        }
+    }
     public class ConsoleLogger : ILogger
     {
         public void Log(string msg)

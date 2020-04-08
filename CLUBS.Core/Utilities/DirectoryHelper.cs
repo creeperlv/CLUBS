@@ -10,6 +10,8 @@ namespace CLUBS.Core.Utilities
         public static void CopyRecursively(string ori, string target)
         {
             DirectoryInfo oriD = new DirectoryInfo(ori);
+            if (!Directory.Exists(target))
+                Directory.CreateDirectory(target);
             foreach (var item in oriD.EnumerateFiles())
             {
                 File.Copy(item.FullName, Path.Combine(target, item.Name));
@@ -18,6 +20,20 @@ namespace CLUBS.Core.Utilities
             {
                 CopyRecursively(item.FullName, Path.Combine(target, item.Name));
             }
+        }
+        public static void DeleteRecursively(string target)
+        {
+            
+            DirectoryInfo oriD = new DirectoryInfo(target);
+            oriD.Delete(true);
+            //foreach (var item in oriD.EnumerateFiles())
+            //{
+            //    item.Delete();
+            //}
+            //foreach (var item in oriD.EnumerateDirectories())
+            //{
+            //    DeleteRecursively(item.FullName);
+            //}
         }
     }
 }

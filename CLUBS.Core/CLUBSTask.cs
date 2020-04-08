@@ -1,4 +1,5 @@
 ﻿using CLUBS.Core.Diagnostics;
+using CLUBS.Core.Utilities;
 using CLUBS.Tools;
 using System;
 using System.Collections.Generic;
@@ -173,19 +174,33 @@ namespace CLUBS.Core
                     //Process import files first.
                     foreach (var item in ImportFiles)
                     {
-                        if (!File.Exists(item.Key))
+                        if (File.Exists(item.Key))
                         {
                             File.Copy(item.Key, Path.Combine(parentRepo.RepoDirectory.FullName,item.Value));
                         }
-                        else if (!Directory.Exists(item.Key))
+                        else if (Directory.Exists(item.Key))
                         {
                             //Directory.cop
+                            DirectoryHelper.CopyRecursively(item.Key, Path.Combine(parentRepo.RepoDirectory.FullName, item.Value));
                         }
                         else
                         {
                             //Relative file or folder.
                             var FileItem= Path.Combine(parentRepo.RepoDirectory.FullName, item.Key);
 
+                            if (File.Exists(FileItem))
+                            {
+                                File.Copy(FileItem, Path.Combine(parentRepo.RepoDirectory.FullName, item.Value));
+                            }
+                            else if (Directory.Exists(FileItem))
+                            {
+                                //Directory.cop
+                                DirectoryHelper.CopyRecursively(FileItem, Path.Combine(parentRepo.RepoDirectory.FullName, item.Value));
+                            }
+                            else
+                            {
+                                Logger.CurrentLogger.Log($"File '{item.Key}' not found!", LogLevel.Warning);
+                            }
                         }
 
                     }
@@ -193,7 +208,34 @@ namespace CLUBS.Core
                 {
                     foreach (var item in TempImportFiles)
                     {
+                        if (File.Exists(item.Key))
+                        {
+                            File.Copy(item.Key, Path.Combine(parentRepo.RepoDirectory.FullName, item.Value));
+                        }
+                        else if (Directory.Exists(item.Key))
+                        {
+                            //Directory.cop
+                            DirectoryHelper.CopyRecursively(item.Key, Path.Combine(parentRepo.RepoDirectory.FullName, item.Value));
+                        }
+                        else
+                        {
+                            //Relative file or folder.
+                            var FileItem = Path.Combine(parentRepo.RepoDirectory.FullName, item.Key);
 
+                            if (File.Exists(FileItem))
+                            {
+                                File.Copy(FileItem, Path.Combine(parentRepo.RepoDirectory.FullName, item.Value));
+                            }
+                            else if (Directory.Exists(FileItem))
+                            {
+                                //Directory.cop
+                                DirectoryHelper.CopyRecursively(FileItem, Path.Combine(parentRepo.RepoDirectory.FullName, item.Value));
+                            }
+                            else
+                            {
+                                Logger.CurrentLogger.Log($"File '{item.Key}' not found!", LogLevel.Warning);
+                            }
+                        }
                     }
                 }
                 {
@@ -203,10 +245,31 @@ namespace CLUBS.Core
                         ExecuteCommand(item);
                     }
                 }
+                {
+                    //Wipe out temporary imported files.
+                    {
+                        foreach (var item in TempImportFiles)
+                        {
+                            var path = Path.Combine(parentRepo.RepoDirectory.FullName, item.Value);
+                            if (File.Exists(path))
+                            {
+                                File.Delete(path);
+                            }
+                            else if (Directory.Exists(path))
+                            {
+                                DirectoryHelper.DeleteRecursively(path);
+                            }
+                            else
+                            {
+                            
+                            }
+                        }
+                    }
+                }
             }
             else
             {
-                Logger.CurrentLogger.Log($"Task Skipped.",LogLevel.Normal);
+                Logger.CurrentLogger.Log($"Task Skipped.",LogLevel.Development);
             }
         }
         public void ExecuteCommand(string cmd)

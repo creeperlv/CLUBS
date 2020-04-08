@@ -18,6 +18,7 @@ namespace CLUBS.Core
         public List<string> Dependencies = new List<string>();
         public ToolConfig CustomedTools=new ToolConfig();
         public string DefaultConfiguration = "Debug";
+        public string LogFolder = "/Logs/";
         public List<CLUBSTask> Tasks = new List<CLUBSTask>();
         public Repo(DirectoryInfo RepoDir)
         {
@@ -56,6 +57,10 @@ namespace CLUBS.Core
                 else if (content_Lines[i].StartsWith("CustomedTools:"))
                 {
                     CustomedTools = ToolConfig.ResolveFromFile(new FileInfo(Path.Combine(RepoDirectory.FullName, content_Lines[i].Substring("CustomedTools:".Length))).FullName);
+                }
+                else if (content_Lines[i].StartsWith("Logs:"))
+                {
+                    LogFolder = content_Lines[i].Substring("Logs:".Length).Trim();
                 }
                 else if (content_Lines[i].StartsWith("DefaultConfiguration:"))
                 {
